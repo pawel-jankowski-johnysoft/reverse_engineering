@@ -1,4 +1,4 @@
-public class TestCharow {
+public class CrackmeByDisIp {
 
     public static void main(String[] args) {
         if(args.length < 1) {
