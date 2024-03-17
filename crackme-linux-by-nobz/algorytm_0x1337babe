@@ -1,0 +1,113 @@
+String sciezka
+int argsCount
+
+
+// LINUX działa odwrotnie do Windows API !!!!
+
+0x8048073(sciezka, argsCount);
+
+
+0x8048073(sciezka, argsCount) {
+	
+	//[ (+0xc) sciezka,(+8) argsCOunt, (+4) adres_powrotu, (0) ebp, (-4)a,(-8)b, (-0xc)c,(-0x10)d,(-0x14)e,(-0x18)f,(-0x1c)g,(-0x20)h,(-0x24)i,(-0x28)j,(-0x2c)k,(-0x30) l)
+	int a; // esp + 0x2c
+	int b; // esp + 0x28
+	int c;// esp + 0x24
+	int d; // esp + 0x20
+
+	int e; // esp + 0x1c
+	int f = czy debugger jest wlaczony; // esp + 0x18
+	int g = 15; //// esp + 0x14
+	int h = adres hasla; // esp + 0x10
+
+	int i; // esp + 0xc
+	int j; // esp +8)
+	int k; //esp+4
+	int l; //esp
+
+
+	if (0x2 == argsCount) {
+      jmp 0x804809f();
+	}
+
+	jmp 0x8048157(0x21, &'-E-');
+}
+
+
+0x804809f() {
+	
+	wynik = call 0x80481b9()
+	(zmienna f) wynik = 0 -> czy jest włączony breakpoint // stos + 0x18 // adres na stosie: 0xffffd7f2
+	zminena g = 15 // (esp + 0x14)
+	zmienna h = ADRES hasla (esp + 0x10)
+	0x80481d6(haslo)
+	eax = 15
+	edx = g
+	// zawsze 15 - 15== 0 -> kod fake
+	//zacznij analize od 0x80480cb
+
+	call 0x80481f3(adres_e, haslo, 15);
+
+	1337babe (esp +4)
+
+	// zakodowanie hasla za pomocą 0x1337babe
+	0x8048238(adres_hasla, 0x1337babe, 0); 
+
+	0x8048203( (adres hasla) 0xffffd7fc, 0x8048181, 15); 
+}
+
+
+
+0x8048238(adres_hasla, 0x1337babe, 0) {
+	ecx = 4
+	eax = (4) <0,3> ^ 0x1337babe -> <0,3> (password)	
+	eax = (4) <4,7> ^ 0x1337babe -> <4,7> (password)	
+	eax = (4) <8, 11> ^ 0x1337babe -> <8,11> (password)	
+	eax = (3) <12, 14> ^ 0x1337babe -> <12,14> (password)	
+}
+
+//kopiowanie hasla pod adres e
+0x80481f3(adres_e, haslo, 15) {
+	
+}
+
+//wykryj ptrace
+0x80481b9(){
+	push   ebp
+   0x80481ba:   mov    ebp,esp
+   0x80481bc:   push   0x1a
+   0x80481be:   pop    eax
+   0x80481bf:   cdq    
+   0x80481c0:   mov    ebx,edx
+   0x80481c2:   int    0x80	
+}
+
+0x80481d6(haslo) {
+	
+	esi = haslo
+	edi = haslo 
+	//znajdz w edi koniec stringa
+	edi = esi + 15 (16?) 
+	0x80481ec() // policz dlugosc znakow 
+	eax = dlugosc znakow hasla
+
+}
+
+
+
+
+0x8048157( 0x21, &'-E-') {
+	0x8048218(0x21, &'-E-');
+
+}
+
+
+// wypisuje komunikat z dwoma argumentami na stosie
+0x8048218(int, String) {
+	
+	eax = 4
+	ebx = 1
+	ecx = String
+	edx = int
+
+}
